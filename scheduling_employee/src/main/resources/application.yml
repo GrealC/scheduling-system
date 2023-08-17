@@ -1,0 +1,11 @@
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/scheduling_system?characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: root
+    password: Dd112255
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.scheduling.mapper
