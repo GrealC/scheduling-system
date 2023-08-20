@@ -1,18 +1,17 @@
-package com.scheduling_employee;
+package com.scheduling_employee.service.impl;
 
 import com.scheduling_employee.mapper.*;
 import com.scheduling_employee.pojo.*;
-import org.junit.jupiter.api.Test;
+import com.scheduling_employee.service.SchedulingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@SpringBootTest
-class SchedulingEmployeeApplicationTests {
-
+@Service
+public class SchedulingServiceImpl implements SchedulingService {
 
     @Autowired
     private BusinessForecastsMapper businessForecastsMapper;
@@ -28,22 +27,20 @@ class SchedulingEmployeeApplicationTests {
     private OvertimeMapper overtimeMapper;
 
     /*
-     *  自动排班
-     * */
-    @Test
-    public void setSchedule() {
+    *  自动排班
+    * */
+    @Override
+    public List<EmployeeWorkPeriods> setSchedule(String storeId, String date) {
 
-        String storeId = "1";
-        String date = "2023-11-17";
         /*
          * 读取排班规则
          * */
-        int workTimes = 3; //默认工作次数
+         int workTimes = 3; //默认工作次数
         List<ScheduleRules> scheduleRules = getScheduleRules(storeId); //工作时段：3个，List中默认3个元素
 
         /*
-         *读取预测信息, businessForecasts中存储date当天工作日3个时段分别对应的客流量
-         * */
+        *读取预测信息, businessForecasts中存储date当天工作日3个时段分别对应的客流量
+        * */
         List<BusinessForecasts> businessForecasts = new ArrayList<>();
 
         for (int j = 1; j <= workTimes; j++){
@@ -51,16 +48,16 @@ class SchedulingEmployeeApplicationTests {
         }
 
         /*
-         * 获取员工信息、休假信息、加班信息、已排班信息
-         * */
+        * 获取员工信息、休假信息、加班信息、已排班信息
+        * */
         List<Users> users = getUsersInfo();
         List<Leave> leaves = getEmployeeLeave();
         List<Overtime> overtimes = getEmployeeOverTime();
         List<EmployeeWorkPeriods> employeeWorkPeriods = getWorkPeriodsInfo();
 
         /*
-         * 信息处理：去除已排班、超工时、已请假的员工信息-->适应值计算、排序
-         * */
+        * 信息处理：去除已排班、超工时、已请假的员工信息-->适应值计算、排序
+        * */
 
         //时段一
         List<String> u1 = resolveEmployee(storeId,"1",users,leaves,overtimes,employeeWorkPeriods,date);
@@ -70,8 +67,8 @@ class SchedulingEmployeeApplicationTests {
         List<String> u3 = resolveEmployee(storeId,"3",users,leaves,overtimes,employeeWorkPeriods,date);
 
         /*
-         *  排班分配
-         * */
+        *  排班分配
+        * */
         List<EmployeeWorkPeriods> e1 = new ArrayList<>();
         List<EmployeeWorkPeriods> e2 = new ArrayList<>();
         List<EmployeeWorkPeriods> e3 = new ArrayList<>();
@@ -140,17 +137,17 @@ class SchedulingEmployeeApplicationTests {
             employeeWorkPeriodsList.add(e3.get(i));
         }
 
-        System.out.println(employeeWorkPeriodsList.toString());
+
+        return employeeWorkPeriodsList;
     }
 
     /*
-     * 处理员工信息
-     * */
-
+    * 处理员工信息
+    * */
+    @Override
     public List<String> resolveEmployee(String storeId, String period, List<Users> users, List<Leave> leave, List<Overtime> overtime, List<EmployeeWorkPeriods> employeeWorkPeriods, String date) {
 
         List<Users> usersList = users;
-
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
         Date nowDate = null;
         try {
@@ -160,8 +157,8 @@ class SchedulingEmployeeApplicationTests {
         }
 
         /*
-         *  去除已排班员工
-         * */
+        *  去除已排班员工
+        * */
         for (int i = 0; i < users.size(); i++) {
             for (EmployeeWorkPeriods e : employeeWorkPeriods) {
                 if(nowDate.compareTo(e.getStart_time())>=0&&nowDate.compareTo(e.getEnd_time())<=0) {
@@ -173,8 +170,8 @@ class SchedulingEmployeeApplicationTests {
         }
 
         /*
-         *  去除已请假员工
-         * */
+        *  去除已请假员工
+        * */
         for (int i = 0; i < users.size(); i++) {
             for (Leave l : leave) {
                 if(nowDate.compareTo(l.getStart_time())>=0&&nowDate.compareTo(l.getEnd_time())<=0) {
@@ -217,7 +214,6 @@ class SchedulingEmployeeApplicationTests {
             workTime_2.put(usersList.get(i).getUser_id(), time2);
             workTime_3.put(usersList.get(i).getUser_id(), time3);
         }
-
         //去除工时已满员工：获取排班规则、计算工时
         List<ScheduleRules> rules = getScheduleRules(storeId);
         Map<String, Integer> sumTime = new HashMap<>();
@@ -233,13 +229,11 @@ class SchedulingEmployeeApplicationTests {
         int ruleTime = rules.get(2).getWork_hours_per_day()+rules.get(1).getWork_hours_per_day()+rules.get(0).getWork_hours_per_day();
         int length = usersList.size();
         for (int i = 0 ; i < length; i++) {
-            if(sumTime.get(usersList.get(i).getUser_id())>ruleTime*rules.get(0).getWork_days_per_week()) {
+            if(sumTime.get(usersList.get(i).getUser_id())>ruleTime||sumTime.get(usersList.get(i).getUser_id())>ruleTime*rules.get(0).getWork_days_per_week()) {
                 sumTime.remove(usersList.get(i).getUser_id());
-
             }
         }
 
-        //bug处，如何排序
         List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(sumTime.entrySet());
         sortedList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
 
@@ -255,9 +249,9 @@ class SchedulingEmployeeApplicationTests {
 
 
     /*
-     * 获取预测信息, 通过店铺id-时段,预测日期获得对应信息
-     * */
-
+    * 获取预测信息, 通过店铺id-时段,预测日期获得对应信息
+    * */
+    @Override
     public BusinessForecasts getBusinessForecasts(String storeId, String time, String periods) {
 
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
@@ -275,9 +269,9 @@ class SchedulingEmployeeApplicationTests {
     }
 
     /*
-     * 获取排班规则信息
-     * */
-
+    * 获取排班规则信息
+    * */
+    @Override
     public List<ScheduleRules> getScheduleRules(String storeID) {
 
         List<ScheduleRules> scheduleRules = scheduleRulesMapper.getScheduleRules(storeID);
@@ -288,7 +282,7 @@ class SchedulingEmployeeApplicationTests {
     /*
      * 获取员工信息
      * */
-
+    @Override
     public List<Users> getUsersInfo() {
 
         List<Users> users = usersMapper.getUsers();
@@ -297,9 +291,9 @@ class SchedulingEmployeeApplicationTests {
     }
 
     /*
-     * 获取工作时段信息
-     * */
-
+    * 获取工作时段信息
+    * */
+    @Override
     public List<EmployeeWorkPeriods> getWorkPeriodsInfo() {
 
         List<EmployeeWorkPeriods> employeeWorkPeriods = employeeWorkPeriodsMapper.getWorkPeriods();
@@ -307,17 +301,20 @@ class SchedulingEmployeeApplicationTests {
     }
 
     /*
-     *  获取员工休假时间
-     * */
-
+    *  获取员工休假时间
+    * */
+    @Override
     public List<Leave> getEmployeeLeave() {
 
         return leaveMapper.getLeaveInfo();
     }
 
     //获取员工加班信息
-
+    @Override
     public List<Overtime> getEmployeeOverTime() {
         return overtimeMapper.getOverTime();
     }
+
+
+
 }

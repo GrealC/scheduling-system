@@ -7,7 +7,8 @@
     <result column="date" jdbcType="DATE" property="date" />
     <result column="foot_traffic" jdbcType="INTEGER" property="footTraffic" />
   </resultMap>
-<!--  <sql id="Base_Column_List">-->
+
+    <!--  <sql id="Base_Column_List">-->
 <!--    forecast_id, store_id, `date`, foot_traffic-->
 <!--  </sql>-->
 <!-- -->

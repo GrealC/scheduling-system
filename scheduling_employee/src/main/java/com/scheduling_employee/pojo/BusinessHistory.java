@@ -17,7 +17,7 @@ public class BusinessHistory implements Serializable {
 
     private String weather;
 
-    private Boolean isVacation;
+    private Boolean is_vacation;
 
     private Integer business;
 

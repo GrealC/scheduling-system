@@ -15,7 +15,7 @@ public class BusinessForecasts implements Serializable {
 
     private Date date;
 
-    private Integer footTraffic;
+    private Integer foot_traffic;
 
     private static final long serialVersionUID = 1L;
 }

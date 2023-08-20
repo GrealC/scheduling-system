@@ -48,6 +48,7 @@ public class PredictServiceImpl implements PredictService {
             historicalDataE.add(b.getBusiness());
         }
 
+        System.out.println(historicalDataA);
         int[] predictionsM = predict(historicalDataM);
         int[] predictionsA = predict(historicalDataA);
         int[] predictionsE = predict(historicalDataE);
