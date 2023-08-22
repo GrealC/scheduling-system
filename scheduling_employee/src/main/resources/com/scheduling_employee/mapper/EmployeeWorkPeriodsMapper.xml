@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.EmployeeWorkPeriodsMapper">
+  <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.EmployeeWorkPeriods">
+    <id column="work_period_id" jdbcType="VARCHAR" property="workPeriodId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+  </resultMap>
+<!--  <sql id="Base_Column_List">-->
+<!--    work_period_id, user_id, start_time, end_time-->
+<!--  </sql>-->
+
+</mapper>

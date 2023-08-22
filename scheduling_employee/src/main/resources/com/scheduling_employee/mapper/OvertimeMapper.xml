@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.OvertimeMapper">
+  <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.Overtime">
+    <id column="overtime_id" jdbcType="VARCHAR" property="overtime_id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+  </resultMap>
+<!--  <sql id="Base_Column_List">-->
+<!--    overtime_id, user_id, start_time, end_time, `type`, `status`, reason-->
+<!--  </sql>-->
+
+</mapper>
+=======
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.arrange.mapper.OvertimeMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.arrange.domain.Overtime">
+            <id property="overtimeId" column="overtime_id" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+            <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="reason" column="reason" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        overtime_id,user_id,start_time,
+        end_time,type,status,
+        reason
+    </sql>
+</mapper>
+>>>>>>> 49b43898253f3622472d3d755702b2966d0380d8

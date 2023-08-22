@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.BusinessHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.BusinessHistory">
+    <id column="history_id" jdbcType="VARCHAR" property="historyId" />
+    <result column="store_id" jdbcType="VARCHAR" property="storeId" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="weather" jdbcType="VARCHAR" property="weather" />
+    <result column="is_vacation" jdbcType="BOOLEAN" property="isVacation" />
+    <result column="business" jdbcType="INTEGER" property="business" />
+  </resultMap>
+<!--  <sql id="Base_Column_List">-->
+<!--    history_id, store_id, `date`, weather, is_vacation, business-->
+<!--  </sql>-->
+
+</mapper>
