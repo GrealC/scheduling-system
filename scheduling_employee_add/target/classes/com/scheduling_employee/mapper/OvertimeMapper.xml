@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.scheduling_employee.mapper.OvertimeMapper">
   <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.Overtime">
-    <id column="overtime_id" jdbcType="VARCHAR" property="overtime_id" />
+    <id column="overtime_id" jdbcType="VARCHAR" property="overtimeId" />
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />

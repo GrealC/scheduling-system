@@ -8,19 +8,19 @@ import lombok.Data;
  */
 @Data
 public class ScheduleRules implements Serializable {
-    private String rule_id;
+    private String ruleId;
 
-    private String store_id;
+    private String storeId;
 
-    private Integer work_days_per_week;
+    private Integer workDaysPerWeek;
 
-    private Integer work_hours_per_day;
+    private Integer workHoursPerDay;
 
-    private String days_work_period;
+    private String daysWorkPeriod;
 
-    private Integer max_work_hours_per_week;
+    private Integer maxWorkHoursPerWeek;
 
-    private Integer max_work_hours_per_month;
+    private Integer maxWorkHoursPerMonth;
 
     private static final long serialVersionUID = 1L;
 }

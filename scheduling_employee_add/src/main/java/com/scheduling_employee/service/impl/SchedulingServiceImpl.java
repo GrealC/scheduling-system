@@ -81,46 +81,46 @@ public class SchedulingServiceImpl implements SchedulingService {
             throw new RuntimeException(e);
         }
 
-        for (int i = 0; i < businessForecasts.get(0).getFoot_traffic()/5; i++) {
+        for (int i = 0; i < businessForecasts.get(0).getFootTraffic()/5; i++) {
 
             if(u1.get(i)==null){
                 break;
             }
             EmployeeWorkPeriods e = new EmployeeWorkPeriods();
-            e.setWorkPeriod_id(i);
-            e.setUser_id(u1.get(i)+"-1");
-            e.setStart_time(startTime);
-            e.setEnd_time(startTime);
+            e.setWorkPeriodId(i);
+            e.setUserId(u1.get(i)+"-1");
+            e.setStartTime(startTime);
+            e.setEndTime(startTime);
             e1.add(e);
-            employeeWorkPeriodsMapper.insertScheduleInfo(e.getUser_id(),e.getStart_time(),e.getEnd_time());
+            employeeWorkPeriodsMapper.insertScheduleInfo(e.getUserId(),e.getStartTime(),e.getEndTime());
         }
 
-        for (int i = 0; i < businessForecasts.get(1).getFoot_traffic()/5; i++) {
+        for (int i = 0; i < businessForecasts.get(1).getFootTraffic()/5; i++) {
 
             if(u2.get(i)==null){
                 break;
             }
             EmployeeWorkPeriods e = new EmployeeWorkPeriods();
-            e.setWorkPeriod_id(i);
-            e.setUser_id(u1.get(i)+"-2");
-            e.setStart_time(startTime);
-            e.setEnd_time(startTime);
+            e.setWorkPeriodId(i);
+            e.setUserId(u1.get(i)+"-2");
+            e.setStartTime(startTime);
+            e.setEndTime(startTime);
             e2.add(e);
-            employeeWorkPeriodsMapper.insertScheduleInfo(e.getUser_id(),e.getStart_time(),e.getEnd_time());
+            employeeWorkPeriodsMapper.insertScheduleInfo(e.getUserId(),e.getStartTime(),e.getEndTime());
         }
 
-        for (int i = 0; i < businessForecasts.get(2).getFoot_traffic()/5; i++) {
+        for (int i = 0; i < businessForecasts.get(2).getFootTraffic()/5; i++) {
 
             if(u3.get(i)==null){
                 break;
             }
             EmployeeWorkPeriods e = new EmployeeWorkPeriods();
-            e.setWorkPeriod_id(i);
-            e.setUser_id(u1.get(i)+"-3");
-            e.setStart_time(startTime);
-            e.setEnd_time(startTime);
+            e.setWorkPeriodId(i);
+            e.setUserId(u1.get(i)+"-3");
+            e.setStartTime(startTime);
+            e.setEndTime(startTime);
             e3.add(e);
-            employeeWorkPeriodsMapper.insertScheduleInfo(e.getUser_id(),e.getStart_time(),e.getEnd_time());
+            employeeWorkPeriodsMapper.insertScheduleInfo(e.getUserId(),e.getStartTime(),e.getEndTime());
         }
 
         List<EmployeeWorkPeriods> employeeWorkPeriodsList = new ArrayList<>();
@@ -161,8 +161,8 @@ public class SchedulingServiceImpl implements SchedulingService {
         * */
         for (int i = 0; i < users.size(); i++) {
             for (EmployeeWorkPeriods e : employeeWorkPeriods) {
-                if(nowDate.compareTo(e.getStart_time())>=0&&nowDate.compareTo(e.getEnd_time())<=0) {
-                    if(e.getUser_id().equals(usersList.get(i).getUser_id()+period)) {
+                if(nowDate.compareTo(e.getStartTime())>=0&&nowDate.compareTo(e.getEndTime())<=0) {
+                    if(e.getUserId().equals(usersList.get(i).getUserId()+period)) {
                         usersList.remove(i);
                     }
                 }
@@ -174,8 +174,8 @@ public class SchedulingServiceImpl implements SchedulingService {
         * */
         for (int i = 0; i < users.size(); i++) {
             for (Leave l : leave) {
-                if(nowDate.compareTo(l.getStart_time())>=0&&nowDate.compareTo(l.getEnd_time())<=0) {
-                    if(l.getUser_id().equals(usersList.get(i).getUser_id()+period)) {
+                if(nowDate.compareTo(l.getStartTime())>=0&&nowDate.compareTo(l.getEndTime())<=0) {
+                    if(l.getUserId().equals(usersList.get(i).getUserId()+period)) {
                         usersList.remove(i);
                     }
                 }
@@ -193,44 +193,44 @@ public class SchedulingServiceImpl implements SchedulingService {
             int time3 = 0;
 
             for (EmployeeWorkPeriods e : employeeWorkPeriods) {
-                if(e.getUser_id().equals(usersList.get(i).getUser_id()+"-1")) {
+                if(e.getUserId().equals(usersList.get(i).getUserId()+"-1")) {
                     time1++;
                 }
             }
 
             for (EmployeeWorkPeriods e : employeeWorkPeriods) {
-                if(e.getUser_id().equals(usersList.get(i).getUser_id()+"-2")) {
+                if(e.getUserId().equals(usersList.get(i).getUserId()+"-2")) {
                     time2++;
                 }
             }
 
             for (EmployeeWorkPeriods e : employeeWorkPeriods) {
-                if(e.getUser_id().equals(usersList.get(i).getUser_id()+"-3")) {
+                if(e.getUserId().equals(usersList.get(i).getUserId()+"-3")) {
                     time3++;
                 }
             }
 
-            workTime_1.put(usersList.get(i).getUser_id(), time1);
-            workTime_2.put(usersList.get(i).getUser_id(), time2);
-            workTime_3.put(usersList.get(i).getUser_id(), time3);
+            workTime_1.put(usersList.get(i).getUserId(), time1);
+            workTime_2.put(usersList.get(i).getUserId(), time2);
+            workTime_3.put(usersList.get(i).getUserId(), time3);
         }
         //去除工时已满员工：获取排班规则、计算工时
         List<ScheduleRules> rules = getScheduleRules(storeId);
         Map<String, Integer> sumTime = new HashMap<>();
 
         for (int i = 0; i < usersList.size(); i++){
-            int time = workTime_1.get(usersList.get(i).getUser_id())*rules.get(0).getWork_hours_per_day();
-            time += workTime_2.get(usersList.get(i).getUser_id())*rules.get(1).getWork_hours_per_day();
-            time += workTime_3.get(usersList.get(i).getUser_id())*rules.get(2).getWork_hours_per_day();
+            int time = workTime_1.get(usersList.get(i).getUserId())*rules.get(0).getWorkHoursPerDay();
+            time += workTime_2.get(usersList.get(i).getUserId())*rules.get(1).getWorkHoursPerDay();
+            time += workTime_3.get(usersList.get(i).getUserId())*rules.get(2).getWorkHoursPerDay();
 
-            sumTime.put(usersList.get(i).getUser_id(), time);
+            sumTime.put(usersList.get(i).getUserId(), time);
         }
 
-        int ruleTime = rules.get(2).getWork_hours_per_day()+rules.get(1).getWork_hours_per_day()+rules.get(0).getWork_hours_per_day();
+        int ruleTime = rules.get(2).getWorkHoursPerDay()+rules.get(1).getWorkHoursPerDay()+rules.get(0).getWorkHoursPerDay();
         int length = usersList.size();
         for (int i = 0 ; i < length; i++) {
-            if(sumTime.get(usersList.get(i).getUser_id())>ruleTime||sumTime.get(usersList.get(i).getUser_id())>ruleTime*rules.get(0).getWork_days_per_week()) {
-                sumTime.remove(usersList.get(i).getUser_id());
+            if(sumTime.get(usersList.get(i).getUserId())>ruleTime||sumTime.get(usersList.get(i).getUserId())>ruleTime*rules.get(0).getWorkHoursPerDay()) {
+                sumTime.remove(usersList.get(i).getUserId());
             }
         }
 

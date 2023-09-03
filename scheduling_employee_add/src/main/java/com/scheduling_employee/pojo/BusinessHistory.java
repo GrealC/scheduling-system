@@ -9,15 +9,15 @@ import lombok.Data;
  */
 @Data
 public class BusinessHistory implements Serializable {
-    private int history_id;
+    private int historyId;
 
-    private String store_id;
+    private String storeId;
 
     private Date date;
 
     private String weather;
 
-    private Boolean is_vacation;
+    private Boolean isVacation;
 
     private Integer business;
 

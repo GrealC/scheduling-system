@@ -25,7 +25,7 @@ public class Users implements Serializable {
 
     @TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty("userId")
-    private String user_id;
+    private String userId;
     @ApiModelProperty("username")
     private String username;
     @NotBlank(message = "密码不能为空")

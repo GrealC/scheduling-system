@@ -62,13 +62,15 @@ public class UserController {
     //登录
     @PostMapping("/login")
     public Result login(@RequestBody  Users user){
+
         Users user1=userService.login(user);
+
         //登录成功，生成令牌，下发令牌
         if(user1!=null){
             if(passwordEncoder.matches(user.getPassword(),user1.getPassword()))
             {
                 Map<String,Object> claims=new HashMap<>();
-                claims.put("userId",user1.getUser_id());
+                claims.put("userId",user1.getUserId());
                 claims.put("username",user1.getUsername());
                 String jwt= JwtUtils.generateJwt(claims);//jwt包含当前登录的员工信息
                 return Result.success(jwt);
@@ -141,7 +143,7 @@ public class UserController {
         }
         String jwt=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("token");
         String userid= (String) JwtUtils.parseJWT(jwt).get("userId");
-        user.setUser_id(userid);
+        user.setUserId(userid);
         userService.update(user);
         return Result.success();
     }

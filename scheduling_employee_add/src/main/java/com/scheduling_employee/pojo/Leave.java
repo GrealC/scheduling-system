@@ -18,13 +18,13 @@ public class Leave implements Serializable {
 
     @TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty("leaveId")
-    private String leave_id;
+    private String leaveId;
     @ApiModelProperty("userId")
-    private String user_id;
+    private String userId;
     @ApiModelProperty("startTime")
-    private Date start_time;
+    private Date startTime;
     @ApiModelProperty("endTime")
-    private Date end_time;
+    private Date endTime;
     @ApiModelProperty("type")
     private String type;
     @ApiModelProperty("status")

@@ -9,13 +9,13 @@ import lombok.Data;
  */
 @Data
 public class BusinessForecasts implements Serializable {
-    private int forecast_id;
+    private int forecastId;
 
-    private String store_id;
+    private String storeId;
 
     private Date date;
 
-    private Integer foot_traffic;
+    private Integer footTraffic;
 
     private static final long serialVersionUID = 1L;
 }

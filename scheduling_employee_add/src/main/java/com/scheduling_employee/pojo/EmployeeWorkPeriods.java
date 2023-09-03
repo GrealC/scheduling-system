@@ -10,13 +10,13 @@ import lombok.Data;
 @Data
 public class EmployeeWorkPeriods implements Serializable {
 
-    private int workPeriod_id;
+    private int workPeriodId;
 
-    private String user_id;
+    private String userId;
 
-    private Date start_time;
+    private Date startTime;
 
-    private Date end_time;
+    private Date endTime;
 
     private static final long serialVersionUID = 1L;
 }

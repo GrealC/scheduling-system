@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.scheduling_employee.mapper.BusinessForecastsMapper">
   <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.BusinessForecasts">
-    <id column="forecast_id" jdbcType="VARCHAR" property="forecast_id" />
-    <result column="store_id" jdbcType="VARCHAR" property="store_id" />
+    <id column="forecast_id" jdbcType="VARCHAR" property="forecastId" />
+    <result column="store_id" jdbcType="VARCHAR" property="storeId" />
     <result column="date" jdbcType="DATE" property="date" />
     <result column="foot_traffic" jdbcType="INTEGER" property="footTraffic" />
   </resultMap>

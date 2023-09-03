@@ -29,7 +29,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
 
     @Override
     public void add(Users user) {
-        user.setUser_id(UUID.randomUUID().toString().replace("-",""));
+        user.setUserId(UUID.randomUUID().toString().replace("-",""));
         String password = user.getPassword();
         String encodePassword = passwordEncoder.encode(password);
         user.setPassword(encodePassword);

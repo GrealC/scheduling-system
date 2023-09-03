@@ -17,19 +17,19 @@ public class Overtime implements Serializable {
 
     @TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty("overtimeId")
-    private String overtime_id;
+    private String overtimeId;
     @ApiModelProperty("userId")
-    private String user_id;
+    private String userId;
     @ApiModelProperty("startTime")
-    private Date start_time;
+    private Date startTime;
     @ApiModelProperty("endTime")
-    private Date end_time;
+    private Date endTime;
     @ApiModelProperty("type")
     private String type;
     @ApiModelProperty("status")
     private String status;
     @ApiModelProperty("reason")
-
+    private String reason;
     private static final long serialVersionUID = 1L;
 
 }
