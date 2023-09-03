@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.BusinessForecastsMapper">
+  <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.BusinessForecasts">
+    <id column="forecast_id" jdbcType="VARCHAR" property="forecast_id" />
+    <result column="store_id" jdbcType="VARCHAR" property="store_id" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="foot_traffic" jdbcType="INTEGER" property="footTraffic" />
+  </resultMap>
+
+    <!--  <sql id="Base_Column_List">-->
+<!--    forecast_id, store_id, `date`, foot_traffic-->
+<!--  </sql>-->
+<!-- -->
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.EmployeeWorkHoursMapper">
+
+    <resultMap id="BaseResultMap" type= "com.scheduling_employee.pojo.EmployeeWorkHours" >
+        <result column="work_hours_id" property="workHoursId" />
+        <result column="user_id" property="userId" />
+        <result column="date" property="date" />
+        <result column="hours_worked" property="hoursWorked" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                work_hours_id,
+                user_id,
+                date,
+                hours_worked
+    </sql>
+
+    <select id="selfWorkTime" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM employee_work_hours
+        where user_id=#{userId}
+        order by date desc
+    </select>
+
+</mapper>

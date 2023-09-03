@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.TotalWorkMapper">
+    <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.TotalWork" >
+        <result column="username" property="username" />
+        <result column="role" property="role" />
+        <result column="totalTime" property="totalTime" />
+        <result column="salary" property="salary" />
+    </resultMap>
+    <sql id="Base_Column_List">
+                username,
+                role,
+                totalTime,
+                salary
+    </sql>
+    <select id="allWorkTime" resultMap="BaseResultMap">
+        SELECT users.username as username,  role,sum(hours_worked) as totalTime,salary
+        FROM users INNER JOIN employee_work_hours on users.user_id=employee_work_hours.user_id
+        group by users.user_id
+    </select>
+    <update id="updateSalary" parameterType="com.scheduling_employee.pojo.TotalWork">
+        UPDATE users
+        <set>
+            salary = #{salary}
+        </set>
+        WHERE username = #{username}
+    </update>
+</mapper>
