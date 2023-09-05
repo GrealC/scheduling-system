@@ -28,25 +28,4 @@ public interface UsersMapper extends BaseMapper<Users> {
      * @Entity com.example.arrange.domain.Users
      */
 
-
-    //JIANGWEN
-    int insert(Users user);
-
-    Users selectByUserName(String userName);
-
-    Users selectByPhone(String phone);
-
-    Users getByUserNameAndPwd(Users user);
-
-    void update(Users user);
-
-    void deleteByUsername(String username);
-
-    Users findEmail(String email);
-
-    void updateByEmail(String email, String password);
-
-    Users findMobile(String phone);
-
-    void updateByMobile(String phone, String password);
 }

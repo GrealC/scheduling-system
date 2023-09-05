@@ -14,7 +14,7 @@ spring:
       database: 0
       host: localhost
       port: 6379
-      password: redis
+#      password: redis(未配置密码，则不写)
 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml

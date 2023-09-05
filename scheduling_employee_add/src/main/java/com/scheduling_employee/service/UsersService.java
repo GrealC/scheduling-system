@@ -10,24 +10,4 @@ import com.scheduling_employee.pojo.Users;
 */
 public interface UsersService extends IService<Users> {
 
-    //JiangWen
-    void add(Users user);
-
-    Users findUserName(String userName);
-
-    Users findUserPhone(String phone);
-
-    Users login(Users user);
-
-    void update(Users user);
-
-    Users retrieveEmail(String email);
-
-    void updateByEmail(String email, String password);
-
-    Users retrieveMobile(String phone);
-
-    void updateByMobile(String phone, String password);
-
-    void delete(String username);
 }

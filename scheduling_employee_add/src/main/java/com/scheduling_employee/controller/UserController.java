@@ -4,8 +4,9 @@ package com.scheduling_employee.controller;
 
 import com.scheduling_employee.pojo.PasswordParam;
 import com.scheduling_employee.pojo.Result;
+import com.scheduling_employee.pojo.User;
 import com.scheduling_employee.pojo.Users;
-import com.scheduling_employee.service.UsersService;
+import com.scheduling_employee.service.UserService;
 import com.scheduling_employee.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,12 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     @Autowired
-    private UsersService userService;
+    private UserService userService;
     @Resource
     private PasswordEncoder passwordEncoder;
     //注册
     @PostMapping("/register")
-    public Result add(@Valid @RequestBody Users user, BindingResult bindingResult
+    public Result add(@Valid @RequestBody User user, BindingResult bindingResult
     ) throws IOException {
         if (bindingResult.hasErrors()) {
             List<ObjectError> allErrors = bindingResult.getAllErrors();
@@ -47,8 +48,8 @@ public class UserController {
         }
         String userName = user.getUsername();
         String phone=user.getPhone();
-        Users user1 = userService.findUserName(userName);
-        Users user2=userService.findUserPhone(phone);
+        User user1 = userService.findUserName(userName);
+        User user2=userService.findUserPhone(phone);
         if (user1 != null) {
             return Result.error("用户名已被注册，请重新输入");
         }
@@ -61,9 +62,9 @@ public class UserController {
 
     //登录
     @PostMapping("/login")
-    public Result login(@RequestBody  Users user){
+    public Result login(@RequestBody  User user){
 
-        Users user1=userService.login(user);
+        User user1=userService.login(user);
 
         //登录成功，生成令牌，下发令牌
         if(user1!=null){
@@ -95,7 +96,7 @@ public class UserController {
         }
         String jwt=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("token");
         String username= (String) JwtUtils.parseJWT(jwt).get("username");
-        Users user=userService.findUserName(username);
+        User user=userService.findUserName(username);
         //数据库密码
         String oldDataBasePassword = user.getPassword();
         //传过来的老密码
@@ -123,13 +124,13 @@ public class UserController {
     public Result getByUserName(){
         String jwt=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("token");
         String username= (String) JwtUtils.parseJWT(jwt).get("username");
-        Users user=userService.findUserName(username);
+        User user=userService.findUserName(username);
         return Result.success(user);
     }
 
     //修改个人信息
     @PutMapping("/updateSelfInfo")
-    public Result UpdateByUsername(@RequestBody Users user, BindingResult bindingResult) {
+    public Result UpdateByUsername(@RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<ObjectError> allErrors = bindingResult.getAllErrors();
             StringBuffer stringBuffer = new StringBuffer();

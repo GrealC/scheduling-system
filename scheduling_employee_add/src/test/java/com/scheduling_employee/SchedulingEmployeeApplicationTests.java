@@ -2,10 +2,17 @@ package com.scheduling_employee;
 
 import com.scheduling_employee.mapper.*;
 import com.scheduling_employee.pojo.*;
+import com.scheduling_employee.service.DailyScheduleService;
+import com.scheduling_employee.service.EmployeeWorkHoursService;
+import com.scheduling_employee.service.TotalWorkService;
+import com.scheduling_employee.utils.JwtUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,232 +33,44 @@ class SchedulingEmployeeApplicationTests {
     private LeaveMapper leaveMapper;
     @Autowired
     private OvertimeMapper overtimeMapper;
-
-    /*
-     *  自动排班
-     * */
+    @Autowired
+    DailyScheduleService dailyScheduleService;
+    @Autowired
+    EmployeeWorkHoursService employeeWorkHoursService;
+    @Autowired
+    TotalWorkService totalWorkService;
     @Test
-    public void setSchedule() {
-
-        String storeId = "1";
-        String date = "2023-11-17";
-        /*
-         * 读取排班规则
-         * */
-        int workTimes = 3; //默认工作次数
-        List<ScheduleRules> scheduleRules = getScheduleRules(storeId); //工作时段：3个，List中默认3个元素
-
-        /*
-         *读取预测信息, businessForecasts中存储date当天工作日3个时段分别对应的客流量
-         * */
-        List<BusinessForecasts> businessForecasts = new ArrayList<>();
-
-        for (int j = 1; j <= workTimes; j++){
-            businessForecasts.add(getBusinessForecasts(storeId,date, "-"+j));
+    public void selectSalary(){
+        List<TotalWork> totalWork=totalWorkService.selectAll();
+        System.out.println(getSalary(totalWork));
+    }
+    public List<TotalWork> getSalary(List<TotalWork> list){
+        BigDecimal a = new BigDecimal(15);
+        BigDecimal b=new BigDecimal(20);
+        for (TotalWork i : list) {
+            if(i.getRole().equals("后勤") || i.getRole().equals("服务员")) i.setSalary(i.getTotalTime().multiply(a));
+            if(i.getRole().equals("店长"))  i.setSalary(i.getTotalTime().multiply(b));
+            totalWorkService.setSalary(i);
         }
-
-        /*
-         * 获取员工信息、休假信息、加班信息、已排班信息
-         * */
-        List<Users> users = getUsersInfo();
-        List<Leave> leaves = getEmployeeLeave();
-        List<Overtime> overtimes = getEmployeeOverTime();
-        List<EmployeeWorkPeriods> employeeWorkPeriods = getWorkPeriodsInfo();
-
-        /*
-         * 信息处理：去除已排班、超工时、已请假的员工信息-->适应值计算、排序
-         * */
-
-        //时段一
-        List<String> u1 = resolveEmployee(storeId,"1",users,leaves,overtimes,employeeWorkPeriods,date);
-        //时段二
-        List<String> u2 = resolveEmployee(storeId,"2",users,leaves,overtimes,employeeWorkPeriods,date);
-        //时段三
-        List<String> u3 = resolveEmployee(storeId,"3",users,leaves,overtimes,employeeWorkPeriods,date);
-
-        /*
-         *  排班分配
-         * */
-        List<EmployeeWorkPeriods> e1 = new ArrayList<>();
-        List<EmployeeWorkPeriods> e2 = new ArrayList<>();
-        List<EmployeeWorkPeriods> e3 = new ArrayList<>();
-
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-        Date startTime = null;
-        try {
-            startTime = ft.parse(date);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        for (int i = 0; i < businessForecasts.get(0).getFoot_traffic()/5; i++) {
-
-            if(u1.get(i)==null){
-                break;
-            }
-            EmployeeWorkPeriods e = new EmployeeWorkPeriods();
-            e.setWorkPeriod_id(i);
-            e.setUser_id(u1.get(i)+"-1");
-            e.setStart_time(startTime);
-            e.setEnd_time(startTime);
-            e1.add(e);
-            employeeWorkPeriodsMapper.insertScheduleInfo(e.getUser_id(),e.getStart_time(),e.getEnd_time());
-        }
-
-        for (int i = 0; i < businessForecasts.get(1).getFoot_traffic()/5; i++) {
-
-            if(u2.get(i)==null){
-                break;
-            }
-            EmployeeWorkPeriods e = new EmployeeWorkPeriods();
-            e.setWorkPeriod_id(i);
-            e.setUser_id(u1.get(i)+"-2");
-            e.setStart_time(startTime);
-            e.setEnd_time(startTime);
-            e2.add(e);
-            employeeWorkPeriodsMapper.insertScheduleInfo(e.getUser_id(),e.getStart_time(),e.getEnd_time());
-        }
-
-        for (int i = 0; i < businessForecasts.get(2).getFoot_traffic()/5; i++) {
-
-            if(u3.get(i)==null){
-                break;
-            }
-            EmployeeWorkPeriods e = new EmployeeWorkPeriods();
-            e.setWorkPeriod_id(i);
-            e.setUser_id(u1.get(i)+"-3");
-            e.setStart_time(startTime);
-            e.setEnd_time(startTime);
-            e3.add(e);
-            employeeWorkPeriodsMapper.insertScheduleInfo(e.getUser_id(),e.getStart_time(),e.getEnd_time());
-        }
-
-        List<EmployeeWorkPeriods> employeeWorkPeriodsList = new ArrayList<>();
-
-        for (int i = 0; i < e1.size(); i++) {
-            employeeWorkPeriodsList.add(e1.get(i));
-        }
-
-        for (int i = 0; i < e2.size(); i++) {
-            employeeWorkPeriodsList.add(e2.get(i));
-        }
-
-        for (int i = 0; i < e3.size(); i++) {
-            employeeWorkPeriodsList.add(e3.get(i));
-        }
-
-        System.out.println(employeeWorkPeriodsList.toString());
+        return  list;
+    }
+    @Test
+    public void workTime(){
+//        String jwt=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("token");
+//        String userId= (String) JwtUtils.parseJWT(jwt).get("userId");
+        String userId = "1";
+        List<EmployeeWorkHours> ewh=employeeWorkHoursService.selectWorkTime(userId);
+        System.out.println(ewh.toString());
+    }
+    @Test
+    public void tt1(){
+//        String jwt=((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("token");
+//        String userId= (String) JwtUtils.parseJWT(jwt).get("userId");
+        String userId = "1";
+        List<DailySchedule> ds=dailyScheduleService.selectSchedule(userId);
+        System.out.println(ds);
     }
 
-    /*
-     * 处理员工信息
-     * */
-
-    public List<String> resolveEmployee(String storeId, String period, List<Users> users, List<Leave> leave, List<Overtime> overtime, List<EmployeeWorkPeriods> employeeWorkPeriods, String date) {
-
-        List<Users> usersList = users;
-
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-        Date nowDate = null;
-        try {
-            nowDate = ft.parse(date);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        /*
-         *  去除已排班员工
-         * */
-        for (int i = 0; i < users.size(); i++) {
-            for (EmployeeWorkPeriods e : employeeWorkPeriods) {
-                if(nowDate.compareTo(e.getStart_time())>=0&&nowDate.compareTo(e.getEnd_time())<=0) {
-                    if(e.getUser_id().equals(usersList.get(i).getUser_id()+period)) {
-                        usersList.remove(i);
-                    }
-                }
-            }
-        }
-
-        /*
-         *  去除已请假员工
-         * */
-        for (int i = 0; i < users.size(); i++) {
-            for (Leave l : leave) {
-                if(nowDate.compareTo(l.getStart_time())>=0&&nowDate.compareTo(l.getEnd_time())<=0) {
-                    if(l.getUser_id().equals(usersList.get(i).getUser_id()+period)) {
-                        usersList.remove(i);
-                    }
-                }
-            }
-        }
-
-        //计算工作时长
-        Map<String, Integer> workTime_1 = new HashMap<>();
-        Map<String, Integer> workTime_2 = new HashMap<>();
-        Map<String, Integer> workTime_3 = new HashMap<>();
-
-        for (int i = 0; i < usersList.size(); i++) {
-            int time1 = 0;
-            int time2 = 0;
-            int time3 = 0;
-
-            for (EmployeeWorkPeriods e : employeeWorkPeriods) {
-                if(e.getUser_id().equals(usersList.get(i).getUser_id()+"-1")) {
-                    time1++;
-                }
-            }
-
-            for (EmployeeWorkPeriods e : employeeWorkPeriods) {
-                if(e.getUser_id().equals(usersList.get(i).getUser_id()+"-2")) {
-                    time2++;
-                }
-            }
-
-            for (EmployeeWorkPeriods e : employeeWorkPeriods) {
-                if(e.getUser_id().equals(usersList.get(i).getUser_id()+"-3")) {
-                    time3++;
-                }
-            }
-
-            workTime_1.put(usersList.get(i).getUser_id(), time1);
-            workTime_2.put(usersList.get(i).getUser_id(), time2);
-            workTime_3.put(usersList.get(i).getUser_id(), time3);
-        }
-
-        //去除工时已满员工：获取排班规则、计算工时
-        List<ScheduleRules> rules = getScheduleRules(storeId);
-        Map<String, Integer> sumTime = new HashMap<>();
-
-        for (int i = 0; i < usersList.size(); i++){
-            int time = workTime_1.get(usersList.get(i).getUser_id())*rules.get(0).getWork_hours_per_day();
-            time += workTime_2.get(usersList.get(i).getUser_id())*rules.get(1).getWork_hours_per_day();
-            time += workTime_3.get(usersList.get(i).getUser_id())*rules.get(2).getWork_hours_per_day();
-
-            sumTime.put(usersList.get(i).getUser_id(), time);
-        }
-
-        int ruleTime = rules.get(2).getWork_hours_per_day()+rules.get(1).getWork_hours_per_day()+rules.get(0).getWork_hours_per_day();
-        int length = usersList.size();
-        for (int i = 0 ; i < length; i++) {
-            if(sumTime.get(usersList.get(i).getUser_id())>ruleTime*rules.get(0).getWork_days_per_week()) {
-                sumTime.remove(usersList.get(i).getUser_id());
-
-            }
-        }
-
-        //bug处，如何排序
-        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(sumTime.entrySet());
-        sortedList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-
-        // 提取排序后的uid保存在List<String>中
-        List<String> sortedUids = new ArrayList<>();
-
-        for (Map.Entry<String, Integer> entry : sortedList) {
-            sortedUids.add(entry.getKey());
-        }
-
-        return sortedUids;
-    }
 
 
     /*

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.User">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="speciality" jdbcType="VARCHAR" property="speciality" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="gender" jdbcType="OTHER" property="gender" />
+    <result column="role" jdbcType="OTHER" property="role" />
+    <result column="salary" jdbcType="DECIMAL" property="salary" />
+  </resultMap>
+<!--  <sql id="Base_Column_List">-->
+<!--    user_id, username, `password`, email, phone, speciality, age, gender, `role`, salary-->
+<!--  </sql>-->
+<!-- -->
+  <sql id="Base_Column_List">
+                user_id,
+                username,
+                password,
+                email,
+                phone,
+                speciality,
+                age,
+                gender,
+                role,
+                salary
+  </sql>
+  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.scheduling_employee.pojo.User">
+    INSERT INTO users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="null != userId and '' != userId">
+        user_id,
+      </if>
+      <if test="null != username and '' != username">
+        username,
+      </if>
+      <if test="null != password and '' != password">
+        password,
+      </if>
+      <if test="null != email and '' != email">
+        email,
+      </if>
+      <if test="null != phone and '' != phone">
+        phone,
+      </if>
+      <if test="null != speciality and '' != speciality">
+        speciality,
+      </if>
+      <if test="null != age and '' != age">
+        age,
+      </if>
+      <if test="null != gender and '' != gender">
+        gender,
+      </if>
+      <if test="null != role and '' != role">
+        role,
+      </if>
+      <if test="null != salary and '' != salary">
+        salary
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="null != userId and '' != userId">
+        #{userId},
+      </if>
+      <if test="null != username and '' != username">
+        #{username},
+      </if>
+      <if test="null != password and '' != password">
+        #{password},
+      </if>
+      <if test="null != email and '' != email">
+        #{email},
+      </if>
+      <if test="null != phone and '' != phone">
+        #{phone},
+      </if>
+      <if test="null != speciality and '' != speciality">
+        #{speciality},
+      </if>
+      <if test="null != age and '' != age">
+        #{age},
+      </if>
+      <if test="null != gender and '' != gender">
+        #{gender},
+      </if>
+      <if test="null != role and '' != role">
+        #{role},
+      </if>
+      <if test="null != salary and '' != salary">
+        #{salary}
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.scheduling_employee.pojo.User">
+    UPDATE users
+    <set>
+      <if test="null != userId and '' != userId">user_id = #{userId},</if>
+      <if test="null != username and '' != username">username = #{username},</if>
+      <if test="null != password and '' != password">password = #{password},</if>
+      <if test="null != email and '' != email">email = #{email},</if>
+      <if test="null != phone and '' != phone">phone = #{phone},</if>
+      <if test="null != speciality and '' != speciality">speciality = #{speciality},</if>
+      <if test="null != age and '' != age">age = #{age},</if>
+      <if test="null != gender and '' != gender">gender = #{gender},</if>
+      <if test="null != role and '' != role">role = #{role},</if>
+      <if test="null != salary and '' != salary">salary = #{salary}</if>
+    </set>
+    WHERE user_id = #{userId}
+  </update>
+
+  <update id="updateByEmail" parameterType="com.scheduling_employee.pojo.User">
+    UPDATE users
+    <set>
+      <if test="null != password and '' != password">password = #{password},</if>
+    </set>
+    WHERE email = #{email}
+  </update>
+
+  <update id="updateByMobile" parameterType="com.scheduling_employee.pojo.User">
+    UPDATE users
+    <set>
+      <if test="null != password and '' != password">password = #{password},</if>
+    </set>
+    WHERE phone= #{phone}
+  </update>
+
+  <select id="selectByUserName" parameterType="java.lang.String" resultType="com.scheduling_employee.pojo.User">
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPhone" parameterType="java.lang.String" resultType="com.scheduling_employee.pojo.User">
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  <select id="getByUserNameAndPwd" parameterType="java.lang.String" resultType="com.scheduling_employee.pojo.User">
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where username= #{username,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByUsername" parameterType="java.lang.String">
+    delete from users
+    where username = #{username,jdbcType=VARCHAR}
+  </delete>
+
+  <select id="findEmail" parameterType="java.lang.String" resultType="com.scheduling_employee.pojo.User">
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where email= #{email,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findMobile" parameterType="java.lang.String" resultType="com.scheduling_employee.pojo.User">
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where phone= #{phone,jdbcType=VARCHAR}
+  </select>
+</mapper>

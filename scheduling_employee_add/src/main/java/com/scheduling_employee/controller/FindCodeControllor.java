@@ -2,8 +2,9 @@ package com.scheduling_employee.controller;
 
 import com.scheduling_employee.pojo.Result;
 import com.scheduling_employee.config.SendMessageUtil;
-import com.scheduling_employee.pojo.Users;
-import com.scheduling_employee.service.UsersService;
+import com.scheduling_employee.pojo.User;
+import com.scheduling_employee.service.UserService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +27,7 @@ public class FindCodeControllor {
     @Autowired
     RedisTemplate redisTemplate;
     @Resource
-    UsersService userService;
+    UserService userService;
 
     /**
      * 通过前端ajax发送email进行验证码的发送，并生成code存入Redis,有效未3分钟,在此期间判断邮箱格式和是否被注册
@@ -45,7 +46,7 @@ public class FindCodeControllor {
                 message = "邮箱格式不正确";
                 return Result.error(message);
             } else {
-                Users user = userService.retrieveEmail(email);
+                User user = userService.retrieveEmail(email);
                 if (user == null) {
                     message = "此邮箱未注册";
                     return Result.error(message);
@@ -102,7 +103,7 @@ public class FindCodeControllor {
         }
         if(SureInformation==1) {
 //            String encodePassword = passwordEncoder.encode(password);
-            Users user=new Users();
+            User user=new User();
             String encodePassword = passwordEncoder.encode(password);
             user.setPassword(encodePassword);
             userService.updateByEmail(email,encodePassword);
@@ -122,7 +123,7 @@ public class FindCodeControllor {
                 message = "手机号格式不正确";
                 return Result.error(message);
             } else {
-                Users user = userService.retrieveMobile(phone);
+                User user = userService.retrieveMobile(phone);
                 if (user == null) {
                     message = "此手机号未注册";
                     return Result.error(message);
@@ -178,7 +179,7 @@ public class FindCodeControllor {
             return Result.error(message);
         }
         if(SureInformation==1) {
-            Users user=new Users();
+            User user=new User();
             String encodePassword = passwordEncoder.encode(password);
             user.setPassword(encodePassword);
             userService.updateByMobile(phone,encodePassword);
