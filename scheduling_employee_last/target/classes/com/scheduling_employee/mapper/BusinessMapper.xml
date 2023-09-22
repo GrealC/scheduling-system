@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.BusinessMapper">
+    <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.Business" >
+        <result column="store_name" property="storeName" />
+        <result column="date" property="date" />
+        <result column="business" property="business" />
+    </resultMap>
+    <sql id="Base_Column_List">
+                store_name,
+                date,
+                business
+    </sql>
+    <select id="getBusiness" resultMap="BaseResultMap">
+        SELECT store_name,date,business
+        FROM store JOIN business_history on store.store_id=business_history.store_id
+        order by date desc
+    </select>
+</mapper>

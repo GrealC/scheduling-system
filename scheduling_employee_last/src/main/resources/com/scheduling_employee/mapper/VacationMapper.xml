@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.VacationMapper">
+
+    <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.Vacation">
+            <id property="calendarId" column="calendar_id" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+            <result property="date" column="date" jdbcType="DATE"/>
+    </resultMap>
+
+<!--    <sql id="Base_Column_List">-->
+<!--        calendar_id,user_id,date-->
+<!--    </sql>-->
+</mapper>

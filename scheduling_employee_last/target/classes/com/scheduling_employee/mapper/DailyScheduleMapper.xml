@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling_employee.mapper.DailyScheduleMapper">
+
+    <resultMap id="BaseResultMap" type="com.scheduling_employee.pojo.DailySchedule" >
+        <result column="schedule_id" property="scheduleId" />
+        <result column="user_id" property="userId" />
+        <result column="store_id" property="storeId" />
+        <result column="date" property="date" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                schedule_id,
+                user_id,
+                store_id,
+                date,
+                start_time,
+                end_time
+    </sql>
+
+
+    <select id="mySchedule" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM daily_schedule
+        where user_id=#{userId}
+        order by date
+    </select>
+
+</mapper>
