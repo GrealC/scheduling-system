@@ -15,6 +15,10 @@ spring:
       host: localhost
       port: 6379
 #      password: redis(未配置密码，则不写)
+server:
+  port: 8081
+  servlet:
+    context-path: /v2
 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
