@@ -108,6 +108,11 @@ const router = createRouter({
           name: "manageSchedule",
           component: () => import("../components/ManageSchedule.vue"),
         },
+        {
+          path: "manageApply",
+          name: "manageApply",
+          component: () => import("../components/ManageApply.vue"),
+        },
       ],
     },
   ],
@@ -119,7 +124,7 @@ router.beforeEach((to, from, next) => {
     to.name !== "register" &&
     to.name !== "forgetView" &&
     to.name !== "changePwd" &&
-    to.name !== "home" &&
+    to.name !== "staff" &&
     !window.localStorage.token
   )
     next({ name: "login" });
@@ -132,12 +137,15 @@ router.beforeEach((to, from, next) => {
       to.name === "staffs" ||
       to.name === "staffChart" ||
       to.name === "manageInfo" ||
+      to.name === "manageStaffInfo" ||
+      to.name === "predict" ||
       to.name === "rule" ||
       to.name === "smart" ||
-      to.name === "scheduling") &&
+      to.name === "manageSchedule" ||
+      to.name === "manageApply") &&
     window.localStorage.role !== "管理员"
   )
-    next({ name: "login" });
+    next({ name: "staff" });
   else next();
 });
 export default router;

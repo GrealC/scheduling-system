@@ -13,6 +13,14 @@ const alertType = ref("");
 const alertIsShow = ref(false);
 const isLogin = ref(false);
 
+if(window.localStorage.token){
+  if(window.localStorage.role === '管理员'){
+    router.push('/manage')
+  } else {
+    router.push('/staff')
+  }
+}
+
 const loginBtn: Function = () => {
   alertIsShow.value = true;
   if (account.value.trim().length === 0 || password.value.trim().length === 0) {

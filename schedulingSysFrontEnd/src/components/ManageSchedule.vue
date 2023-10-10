@@ -8,8 +8,12 @@
         type="primary"
         style="max-width: 8.125rem; margin-left: 3.125rem"
         @click="openModal"
-        >修改排班</el-button
-      >
+        >修改排班</el-button>
+        <el-button
+        type="primary"
+        style="max-width: 8.125rem; margin-left: 3.125rem"
+        @click="toManageApply"
+        >申请处理</el-button>
     </div>
     <div class="schedule-container">
       <el-calendar>
@@ -87,6 +91,7 @@
 import moment from "moment";
 import Apply from "./Apply.vue"; // 引入你的组件
 import { getSelfSchedule } from "../api/staff.ts";
+import router from "../router";
 
 export default {
   components: {
@@ -120,6 +125,9 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    toManageApply(){
+      router.push('/manage/manageApply')
     },
     calItem(d) {
       this.editForm.day = d;
