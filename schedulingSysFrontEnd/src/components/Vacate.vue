@@ -110,7 +110,7 @@ const onOvertimeDialogClose = () => {
             ></el-input>
           </el-form-item>
           <el-form-item label="请假理由:">
-            <el-input v-model="leaveReason" class="text-input"></el-input>
+            <el-input v-model="leaveReason" class="text-input" placeholder="请输入请假理由"></el-input>
           </el-form-item>
         </el-form>
 

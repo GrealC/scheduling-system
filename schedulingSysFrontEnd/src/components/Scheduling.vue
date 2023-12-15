@@ -111,7 +111,7 @@ export default {
   },
   data() {
     return {
-      resDate: [{ date: "", content: "", grade: "" }],
+      resDate: [{ date:"", content: "", grade: "" },],
       planDialogVisible: false,
       applyDialogVisible: false,
       rcdata: {},
@@ -194,6 +194,7 @@ export default {
 .scheduling {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 .schedule-container {
   max-width: 300rem;

@@ -11,3 +11,15 @@ export function getRule(params: object) {
     },
   });
 }
+//保存排班规则设置
+export function saveRule(params: object) {
+  return request({
+    method: "post",
+    url: "/saveRule",
+    data: params,
+    headers: {
+      token: window.localStorage.token,
+    },
+  });
+}
+

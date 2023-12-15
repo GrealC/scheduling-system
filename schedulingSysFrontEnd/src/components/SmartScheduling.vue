@@ -5,6 +5,7 @@ import { getSmartSchedule } from "../api/schedule.ts";
 
 const date = ref("");
 const sId = ref("");
+const selectValue = ref('')
 const monArr = ref([{ time: "", id: "", name: "" }]);
 const tueArr = ref([{ time: "", id: "", name: "" }]);
 const wedArr = ref([{ time: "", id: "", name: "" }]);
@@ -12,6 +13,8 @@ const thuArr = ref([{ time: "", id: "", name: "" }]);
 const friArr = ref([{ time: "", id: "", name: "" }]);
 const satArr = ref([{ time: "", id: "", name: "" }]);
 const sunArr = ref([{ time: "", id: "", name: "" }]);
+const options = ref([{storeName:'', id:''}])
+
 
 onMounted(() => {
   const params = {
@@ -51,6 +54,19 @@ const disabledDate = (time: Date) => {
         placeholder="选择周一查看该周智能排班"
         :disabled-date="disabledDate"
       />
+      <div class="select-store">
+          <el-select
+            v-model="selectValue"
+            class="m-2"
+            placeholder="店铺名称"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.storeName"
+              :value="item.storeName"
+            />
+          </el-select>
+        </div>
     </div>
     <div class="main">
       <ul class="mon">
@@ -155,6 +171,9 @@ const disabledDate = (time: Date) => {
     display: flex;
     justify-content: center;
     align-items: center;
+    .select-store {
+      margin-left: 30px;
+    }
   }
   .main {
     width: 96%;

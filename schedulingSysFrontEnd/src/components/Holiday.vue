@@ -95,7 +95,7 @@ const newTableData = ref([
     name: "",
     beginDate: "",
     endDate: "",
-  },
+  }
 ]);
 const tableData = ref(newTableData);
 const dialogVisible = ref(false);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as echarts from "echarts";
-import { onMounted, defineProps } from "vue";
+import { onMounted} from "vue";
 
 const props = defineProps(["shopArr"]);
 
